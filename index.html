@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Thaveesha Kuruppuarachchi | Portfolio</title>
   <style>
     * {
@@ -13,18 +13,28 @@
     html, body {
       height: 100%;
       background-color: #0f0f0f;
-      color: #00ff88;
       font-family: 'Share Tech Mono', monospace;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      color: #00ff88;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
     }
     .terminal-container {
+      position: relative;
+      z-index: 1;
       background: #1a1a1a;
       border-radius: 10px;
       box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
       width: 700px;
+      margin: auto;
       padding: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
     }
     .terminal-header {
       background: #262626;
@@ -69,6 +79,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <canvas id="matrix"></canvas>
+
   <div class="terminal-container">
     <div class="terminal-header">
       <div class="circle red"></div>
@@ -79,6 +92,44 @@
   </div>
 
   <script>
+    // Matrix effect
+    const c = document.getElementById("matrix");
+    const ctx = c.getContext("2d");
+
+    function resizeCanvas() {
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const letters = "01";
+    const fontSize = 14;
+    let columns = Math.floor(c.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+      ctx.fillRect(0, 0, c.width, c.height);
+
+      ctx.fillStyle = "#00FF88";
+      ctx.font = fontSize + "px Share Tech Mono";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > c.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 33);
+  </script>
+
+  <script>
+    // Terminal typing effect
     const lines = [
       "Welcome to 127.0.0.1 — Thaveesha's sandbox\n",
       "user@localhost:~$ whoami",
@@ -113,11 +164,12 @@
 
     function typeLine() {
       if (lineIndex < lines.length) {
-        if (charIndex <= lines[lineIndex].length) {
+        const currentLine = lines[lineIndex];
+        if (charIndex <= currentLine.length) {
           terminal.innerHTML =
-            lines.slice(0, lineIndex).join("\n") +
-            "\n" +
-            lines[lineIndex].substring(0, charIndex) +
+            lines.slice(0, lineIndex).join('\n') +
+            '\n' +
+            currentLine.substring(0, charIndex) +
             '<span class="cursor"></span>';
           charIndex++;
           setTimeout(typeLine, 30);
@@ -127,7 +179,7 @@
           setTimeout(typeLine, 250);
         }
       } else {
-        terminal.innerHTML = lines.join("\n") + "\n";
+        terminal.innerHTML = lines.join('\n');
       }
     }
 
