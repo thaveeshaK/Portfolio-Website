@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Thaveesha Kuruppuarachchi | Portfolio</title>
+  <link rel="icon" href="img/tk.png" type="image/png">
   <style>
     * {
       margin: 0;
@@ -92,44 +93,43 @@
   </div>
 
   <script>
-    // Matrix effect
-    const c = document.getElementById("matrix");
-    const ctx = c.getContext("2d");
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
 
     function resizeCanvas() {
-      c.width = window.innerWidth;
-      c.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
-    const letters = "01";
-    const fontSize = 14;
-    let columns = Math.floor(c.width / fontSize);
-    const drops = Array(columns).fill(1);
+    const letters = "01$@#&%*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(0);
 
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-      ctx.fillRect(0, 0, c.width, c.height);
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "#00FF88";
-      ctx.font = fontSize + "px Share Tech Mono";
+      ctx.font = fontSize + "px 'Share Tech Mono'";
 
       for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        const char = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillStyle = Math.random() > 0.996 ? "#ff4444" : "#00ff88";
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
 
-        if (drops[i] * fontSize > c.height && Math.random() > 0.975) {
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
-        drops[i]++;
+        drops[i] += 0.5; // very slow fall
       }
     }
-    setInterval(drawMatrix, 33);
+
+    setInterval(draw, 80);
   </script>
 
   <script>
-    // Terminal typing effect
     const lines = [
       "Welcome to 127.0.0.1 — Thaveesha's sandbox\n",
       "user@localhost:~$ whoami",
