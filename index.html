@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thaveesha Kuruppuarachchi | Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      background-color: #0f0f0f;
+      color: #00ff88;
+      font-family: 'Share Tech Mono', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .terminal-container {
+      background: #1a1a1a;
+      border-radius: 10px;
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+      width: 700px;
+      padding: 1.5rem;
+    }
+    .terminal-header {
+      background: #262626;
+      padding: 0.5rem 1rem;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      align-items: center;
+    }
+    .circle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .red { background-color: #ff5f56; }
+    .yellow { background-color: #ffbd2e; }
+    .green { background-color: #27c93f; }
+    .terminal-body {
+      padding: 1rem;
+      white-space: pre-wrap;
+      line-height: 1.4;
+      font-size: 13px;
+      min-height: 300px;
+    }
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: #00ff88;
+      animation: blink 0.7s steps(2, start) infinite;
+      vertical-align: bottom;
+    }
+    a {
+      color: #00ff88;
+      text-decoration: underline;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="terminal-container">
+    <div class="terminal-header">
+      <div class="circle red"></div>
+      <div class="circle yellow"></div>
+      <div class="circle green"></div>
+    </div>
+    <div class="terminal-body" id="terminal"></div>
+  </div>
+
+  <script>
+    const lines = [
+      "Welcome to 127.0.0.1 — Thaveesha's sandbox\n",
+      "user@localhost:~$ whoami",
+      "Thaveesha Kuruppuarachchi",
+      "Software Engineer | Cyber Security Analyst | Full Stack Developer",
+      "\n> Decoding complex systems. Engineering scalable, secure infrastructures.",
+      "\nuser@localhost:~$ cat profile.txt",
+      "Location: Melbourne, Australia",
+      "MSc Cyber Security @ Swinburne University (Reading)",
+      "BSc (Hons) Computer Science & Software Engineering (1st Class)\n",
+      "\nuser@localhost:~$ nano experience.log",
+      "[+] Software Engineer @ Virtusa\n    - Designed and deployed microservices using Java Spring Boot\n    - Practiced TDD with JUnit5 & Mockito\n    - Integrated CI/CD pipelines using Bitbucket & Jenkins\n    - Delivered REST APIs supporting scalable frontends\n",
+      "\nuser@localhost:~$ tail -f projects.txt",
+      "[+] Threat Actor Scoring System\n    - MITRE ATT&CK + NIST 800-53 driven risk scoring engine\n    - Python + Pandas\n    - github.com/badamnshake/ThreatActorScorer\n",
+      "[+] LoRa Messaging System\n    - Secured underground messaging system using LoRa modules\n    - Python, Tkinter GUI, Arduino Encryption\n    - github.com/thaveeshaK/LoRa-based-text-messaging-system\n",
+      "\nuser@localhost:~$ ls skills/ --details",
+      "├── Languages     : Java, Python, PHP, TypeScript, SQL, C++, C#",
+      "├── Frameworks    : Spring Boot, Angular, ASP.NET MVC",
+      "├── Tools         : Docker, Git, MongoDB, Jenkins",
+      "├── Concepts      : Agile, Secure Coding, Threat Modelling, TDD",
+      "├── Interests     : AI x Security, Cyber Forensics, Red Team Automation",
+      "\nuser@localhost:~$ curl -s https://linkedin.com/in/thaveeshak",
+      "🔗 LinkedIn: <a href='https://linkedin.com/in/thaveeshak' target='_blank'>linkedin.com/in/thaveeshak</a>",
+      "🔗 GitHub  : <a href='https://github.com/thaveeshaK' target='_blank'>github.com/thaveeshaK</a>",
+      "✉️ Email   : thaveesha@zoho.com",
+      "\nuser@localhost:~$ exit"
+    ];
+
+    const terminal = document.getElementById('terminal');
+    let lineIndex = 0;
+    let charIndex = 0;
+
+    function typeLine() {
+      if (lineIndex < lines.length) {
+        if (charIndex <= lines[lineIndex].length) {
+          terminal.innerHTML =
+            lines.slice(0, lineIndex).join("\n") +
+            "\n" +
+            lines[lineIndex].substring(0, charIndex) +
+            '<span class="cursor"></span>';
+          charIndex++;
+          setTimeout(typeLine, 30);
+        } else {
+          charIndex = 0;
+          lineIndex++;
+          setTimeout(typeLine, 250);
+        }
+      } else {
+        terminal.innerHTML = lines.join("\n") + "\n";
+      }
+    }
+
+    typeLine();
+  </script>
+</body>
+</html>
