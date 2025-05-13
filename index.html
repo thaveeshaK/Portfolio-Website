@@ -6,11 +6,7 @@
   <title>Thaveesha Kuruppuarachchi | Portfolio</title>
   <link rel="icon" href="img/tk.png" type="image/png">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       height: 100%;
       background-color: #0f0f0f;
@@ -81,109 +77,120 @@
 </head>
 <body>
 
-  <canvas id="matrix"></canvas>
+<canvas id="matrix"></canvas>
 
-  <div class="terminal-container">
-    <div class="terminal-header">
-      <div class="circle red"></div>
-      <div class="circle yellow"></div>
-      <div class="circle green"></div>
-    </div>
-    <div class="terminal-body" id="terminal"></div>
+<div class="terminal-container">
+  <div class="terminal-header">
+    <div class="circle red"></div>
+    <div class="circle yellow"></div>
+    <div class="circle green"></div>
   </div>
+  <div class="terminal-body" id="terminal">
+    <span class="cursor"></span>
+  </div>
+</div>
 
-  <script>
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
+<script>
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
 
-    const letters = "01$@#&%*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const fontSize = 16;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(0);
+  const letters = "01$@#&%*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const fontSize = 16;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = Array(columns).fill(0);
 
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+  let initialFloodFrames = 60; // Number of frames before typing starts
+  let frameCount = 0;
+  let typingStarted = false;
 
-      ctx.font = fontSize + "px 'Share Tech Mono'";
+  function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // More transparent
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      for (let i = 0; i < drops.length; i++) {
-        const char = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillStyle = Math.random() > 0.996 ? "#ff4444" : "#00ff88";
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+    ctx.font = fontSize + "px 'Share Tech Mono'";
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i] += 0.5; // very slow fall
+    for (let i = 0; i < drops.length; i++) {
+      const char = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillStyle = Math.random() > 0.996 ? "#ff4444" : "#00ff88";
+      ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
       }
+      drops[i] += 0.5;
     }
 
-    setInterval(draw, 80);
-  </script>
+    frameCount++;
+    if (frameCount > initialFloodFrames && !typingStarted) {
+      typingStarted = true;
+      document.querySelector(".cursor").remove();
+      typeLine();
+    }
+  }
 
-  <script>
-    const lines = [
-      "Welcome to 127.0.0.1 — Thaveesha's sandbox\n",
-      "user@localhost:~$ whoami",
-      "Thaveesha Kuruppuarachchi",
-      "Software Engineer | Cyber Security Analyst | Full Stack Developer",
-      "\n> Decoding complex systems. Engineering scalable, secure infrastructures.",
-      "\nuser@localhost:~$ cat profile.txt",
-      "Location: Melbourne, Australia",
-      "MSc Cyber Security @ Swinburne University (Reading)",
-      "BSc (Hons) Computer Science & Software Engineering (1st Class)\n",
-      "\nuser@localhost:~$ nano experience.log",
-      "[+] Software Engineer @ Virtusa\n    - Designed and deployed microservices using Java Spring Boot\n    - Practiced TDD with JUnit5 & Mockito\n    - Integrated CI/CD pipelines using Bitbucket & Jenkins\n    - Delivered REST APIs supporting scalable frontends\n",
-      "\nuser@localhost:~$ tail -f projects.txt",
-      "[+] Threat Actor Scoring System\n    - MITRE ATT&CK + NIST 800-53 driven risk scoring engine\n    - Python + Pandas\n    - github.com/badamnshake/ThreatActorScorer\n",
-      "[+] LoRa Messaging System\n    - Secured underground messaging system using LoRa modules\n    - Python, Tkinter GUI, Arduino Encryption\n    - github.com/thaveeshaK/LoRa-based-text-messaging-system\n",
-      "\nuser@localhost:~$ ls skills/ --details",
-      "├── Languages     : Java, Python, PHP, TypeScript, SQL, C++, C#",
-      "├── Frameworks    : Spring Boot, Angular, ASP.NET MVC",
-      "├── Tools         : Docker, Git, MongoDB, Jenkins",
-      "├── Concepts      : Agile, Secure Coding, Threat Modelling, TDD",
-      "├── Interests     : AI x Security, Cyber Forensics, Red Team Automation",
-      "\nuser@localhost:~$ curl -s https://linkedin.com/in/thaveeshak",
-      "🔗 LinkedIn: <a href='https://linkedin.com/in/thaveeshak' target='_blank'>linkedin.com/in/thaveeshak</a>",
-      "🔗 GitHub  : <a href='https://github.com/thaveeshaK' target='_blank'>github.com/thaveeshaK</a>",
-      "✉️ Email   : thaveesha@zoho.com",
-      "\nuser@localhost:~$ exit"
-    ];
+  setInterval(draw, 80);
+</script>
 
-    const terminal = document.getElementById('terminal');
-    let lineIndex = 0;
-    let charIndex = 0;
+<script>
+  const lines = [
+    "Welcome to 127.0.0.1 — Thaveesha's sandbox\n",
+    "user@localhost:~$ whoami",
+    "Thaveesha Kuruppuarachchi",
+    "Software Engineer | Cyber Security Analyst | Full Stack Developer",
+    "\n> Decoding complex systems. Engineering scalable, secure infrastructures.",
+    "\nuser@localhost:~$ cat profile.txt",
+    "Location: Melbourne, Australia",
+    "MSc Cyber Security @ Swinburne University (Reading)",
+    "BSc (Hons) Computer Science & Software Engineering (1st Class)\n",
+    "\nuser@localhost:~$ nano experience.log",
+    "[+] Software Engineer @ Virtusa\n    - Designed and deployed microservices using Java Spring Boot\n    - Practiced TDD with JUnit5 & Mockito\n    - Integrated CI/CD pipelines using Bitbucket & Jenkins\n    - Delivered REST APIs supporting scalable frontends\n",
+    "\nuser@localhost:~$ tail -f projects.txt",
+    "[+] Threat Actor Scoring System\n    - MITRE ATT&CK + NIST 800-53 driven risk scoring engine\n    - Python + Pandas\n    - github.com/badamnshake/ThreatActorScorer\n",
+    "[+] LoRa Messaging System\n    - Secured underground messaging system using LoRa modules\n    - Python, Tkinter GUI, Arduino Encryption\n    - github.com/thaveeshaK/LoRa-based-text-messaging-system\n",
+    "\nuser@localhost:~$ ls skills/ --details",
+    "├── Languages     : Java, Python, PHP, TypeScript, SQL, C++, C#",
+    "├── Frameworks    : Spring Boot, Angular, ASP.NET MVC",
+    "├── Tools         : Docker, Git, MongoDB, Jenkins",
+    "├── Concepts      : Agile, Secure Coding, Threat Modelling, TDD",
+    "├── Interests     : AI x Security, Cyber Forensics, Red Team Automation",
+    "\nuser@localhost:~$ curl -s https://linkedin.com/in/thaveeshak",
+    "🔗 LinkedIn: <a href='https://linkedin.com/in/thaveeshak' target='_blank'>linkedin.com/in/thaveeshak</a>",
+    "🔗 GitHub  : <a href='https://github.com/thaveeshaK' target='_blank'>github.com/thaveeshaK</a>",
+    "✉️ Email   : thaveesha@zoho.com",
+    "\nuser@localhost:~$ exit"
+  ];
 
-    function typeLine() {
-      if (lineIndex < lines.length) {
-        const currentLine = lines[lineIndex];
-        if (charIndex <= currentLine.length) {
-          terminal.innerHTML =
-            lines.slice(0, lineIndex).join('\n') +
-            '\n' +
-            currentLine.substring(0, charIndex) +
-            '<span class="cursor"></span>';
-          charIndex++;
-          setTimeout(typeLine, 30);
-        } else {
-          charIndex = 0;
-          lineIndex++;
-          setTimeout(typeLine, 250);
-        }
+  const terminal = document.getElementById('terminal');
+  let lineIndex = 0;
+  let charIndex = 0;
+
+  function typeLine() {
+    if (lineIndex < lines.length) {
+      const currentLine = lines[lineIndex];
+      if (charIndex <= currentLine.length) {
+        terminal.innerHTML =
+          lines.slice(0, lineIndex).join('\n') +
+          '\n' +
+          currentLine.substring(0, charIndex) +
+          '<span class="cursor"></span>';
+        charIndex++;
+        setTimeout(typeLine, 30);
       } else {
-        terminal.innerHTML = lines.join('\n');
+        charIndex = 0;
+        lineIndex++;
+        setTimeout(typeLine, 250);
       }
+    } else {
+      terminal.innerHTML = lines.join('\n');
     }
-
-    typeLine();
-  </script>
+  }
+</script>
 </body>
 </html>
