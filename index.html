@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Thaveesha Kuruppuarachchi | Portfolio</title>
   <link rel="icon" href="img/tk.png" type="image/png">
-  <style>
+<style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       height: 100%;
@@ -55,6 +55,20 @@
       line-height: 1.4;
       font-size: 13px;
       min-height: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 255, 136, 0.2) transparent;
+    }
+    .terminal-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .terminal-body::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 255, 136, 0.2);
+      border-radius: 4px;
+    }
+    .terminal-body::-webkit-scrollbar-track {
+      background: transparent;
     }
     .cursor {
       display: inline-block;
@@ -73,6 +87,7 @@
       50% { opacity: 0; }
     }
   </style>
+
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -106,12 +121,12 @@
   const columns = Math.floor(canvas.width / fontSize);
   const drops = Array(columns).fill(0);
 
-  let initialFloodFrames = 60; // Number of frames before typing starts
+  let initialFloodFrames = 60;
   let frameCount = 0;
   let typingStarted = false;
 
   function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // More transparent
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.font = fontSize + "px 'Share Tech Mono'";
@@ -180,6 +195,7 @@
           '\n' +
           currentLine.substring(0, charIndex) +
           '<span class="cursor"></span>';
+        terminal.scrollTop = terminal.scrollHeight;
         charIndex++;
         setTimeout(typeLine, 30);
       } else {
